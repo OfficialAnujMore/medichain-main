@@ -40,59 +40,13 @@ const AuthPage = ({ setUserRole, contract, accounts }) => {
       console.log('Response:', response.data);
 
       if (isRegister) {
-        if (role === 'doctor' || role === 'insurance') {
-          try {
-            const methodName =
-              role === 'doctor' ? 'registerDoctor' : 'registerInsuranceCompany';
-
-            console.log(
-              `Registering ${role} on the blockchain: ${accounts[0]}`,
-            );
-            let receipt;
-
-            if (role === 'insurance') {
-              receipt = await contract.methods[methodName](
-                accounts[0],
-                username,
-              ).send({ from: accounts[0] });
-            } else {
-              receipt = await contract.methods[methodName](accounts[0]).send({
-                from: accounts[0],
-              });
-            }
-
-            if (receipt.status) {
-              console.log(
-                `${
-                  role.charAt(0).toUpperCase() + role.slice(1)
-                } registered on the blockchain successfully.`,
-              );
-              alert(
-                `${
-                  role.charAt(0).toUpperCase() + role.slice(1)
-                } registration completed successfully.`,
-              );
-            } else {
-              alert(
-                `${
-                  role.charAt(0).toUpperCase() + role.slice(1)
-                } registration failed on the blockchain.`,
-              );
-            }
-          } catch (err) {
-            console.error(
-              `Blockchain registration failed for ${role}:`,
-              err.message,
-            );
-            alert(
-              `${
-                role.charAt(0).toUpperCase() + role.slice(1)
-              } registration failed on the blockchain.`,
-            );
-          }
+        // Backend handles blockchain registration for doctors and insurance
+        // No need to call blockchain from frontend since backend does it with owner account
+        if (response.data.message) {
+          alert(response.data.message);
+        } else {
+          alert('Registration successful! Please log in with your credentials.');
         }
-
-        alert('Registration successful! Please log in with your credentials.');
         setIsRegister(false);
         setUsername('');
         setPassword('');

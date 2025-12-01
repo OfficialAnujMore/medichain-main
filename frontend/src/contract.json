@@ -1131,10 +1131,10 @@
   ],
   "networks": {
     "1337": {
-      "address": "0x2C86689C6f4e8D3fBc191952a4E61914640D48E0"
+      "address": "0x6d2D14BE8D9FB7913a19015330Bb3D4489f73623"
     },
     "5777": {
-      "address": "0x2C86689C6f4e8D3fBc191952a4E61914640D48E0"
+      "address": "0x6d2D14BE8D9FB7913a19015330Bb3D4489f73623"
     }
   }
 }
