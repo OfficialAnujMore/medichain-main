@@ -1,39 +1,42 @@
-/* Overall Container */
+/* Clean Simple Design - Applicant Portal */
 .app-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 2rem;
-  background-color: #f5f8fc;
+  background: #f8fafc;
   min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* Logout Button */
 .logout-container {
   display: flex;
-  justify-content: flex-end; /* Align to the right */
-  position: absolute;
-  right: 10%;
-  padding: 1rem;
+  justify-content: flex-end;
+  position: fixed;
+  top: 1.5rem;
+  right: 2rem;
+  z-index: 1000;
 }
 
 .logout-button {
-  background-color: #ff4d4d;
+  background: #ef4444;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   width: 100px;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1rem;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);
+  transition: all 0.2s ease;
 }
 
 .logout-button:hover {
-  background-color: #e63939;
-  transform: translateY(-2px);
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
 }
 
 .logout-button:focus {
@@ -51,59 +54,68 @@
 
 /* Employer Card */
 .employer-card {
-  background-color: #ffffff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
   width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .employer-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-color: #2563eb;
 }
 
 /* Employer Name */
 .employer-name {
   font-size: 1.2rem;
-  font-weight: bold;
-  color: #4a90e2;
+  font-weight: 700;
+  color: #2563eb;
   margin-bottom: 0.5rem;
 }
 
 /* Employer Status */
 .employer-status {
   font-size: 0.9rem;
-  font-weight: bold;
+  font-weight: 500;
+  color: #64748b;
   margin-top: 0.5rem;
 }
 
 /* Apply Button */
 .apply-button {
-  background-color: #3498db;
+  background: #2563eb;
   color: white;
   border: none;
-  border-radius: 6px;
-  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
+  margin-top: 1rem;
+  width: 100%;
 }
 
 .apply-button:hover {
-  background-color: #2980b9;
-  transform: translateY(-2px);
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
 }
 
 .apply-button:disabled {
-  background-color: #cccccc;
+  background: #cbd5e1;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* ApplicantPortal Container */
@@ -111,24 +123,28 @@
   max-width: 800px;
   margin: 0 auto;
   margin-top: 100px;
-  padding: 1rem 2rem;
+  padding: 2.5rem;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
 }
 
 /* Headings */
 .applicant-portal h2 {
   text-align: center;
-  color: #4a90e2;
+  color: #1e293b;
   margin-bottom: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
 }
 
 .applicant-portal h3 {
-  color: #4a4a4a;
+  color: #1e293b;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #4a90e2;
-  display: inline-block;
+  font-size: 1.5rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
   padding-bottom: 0.5rem;
 }
 
@@ -139,64 +155,88 @@
 }
 
 .applicant-portal li {
-  padding: 0.8rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 0.8rem;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  margin-bottom: 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #f8fafc;
+  transition: all 0.2s ease;
 }
 
 .applicant-portal li:hover {
-  background-color: #f0f8ff;
-  border-color: #4a90e2;
+  background: #ffffff;
+  border-color: #2563eb;
+  transform: translateX(4px);
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
 }
 
 /* Buttons */
 .applicant-portal button {
-  background-color: #4a90e2;
+  background: #2563eb;
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
 }
 
 .applicant-portal button:hover {
-  background-color: #357ab8;
-  transform: translateY(-2px);
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
 }
 
 .applicant-portal button:disabled {
-  background-color: #cccccc;
+  background: #cbd5e1;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Inputs */
 .applicant-portal input[type='text'],
 .applicant-portal input[type='file'] {
-  width: calc(100% - 2rem);
-  padding: 0.5rem;
+  width: 100%;
+  padding: 0.875rem 1rem;
   margin-bottom: 1rem;
-  border: 1px solid #ddd;
+  border: 2px solid #e2e8f0;
   border-radius: 8px;
   font-size: 1rem;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  font-family: 'Inter', sans-serif;
+}
+
+.applicant-portal input[type='text']:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .applicant-portal input[type='file'] {
   cursor: pointer;
+  background: #f8fafc;
+}
+
+.applicant-portal input[type='file']:hover {
+  background: #ffffff;
+  border-color: #2563eb;
 }
 
 /* Status Section */
 .verification-statuses {
   margin-top: 2rem;
-  padding: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
 }
 
 .verification-statuses ul {
@@ -207,46 +247,54 @@
 .verification-statuses li {
   margin-bottom: 1rem;
   padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
   background: #ffffff;
 }
 
 .verification-statuses li strong {
   display: block;
   margin-bottom: 0.5rem;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .verification-statuses span {
   display: inline-block;
   margin-top: 0.5rem;
-  font-weight: bold;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
 }
 
 .verification-statuses span[style*='green'] {
-  color: #28a745;
+  color: #22c55e;
+  background: #dcfce7;
 }
 
 .verification-statuses span[style*='red'] {
-  color: #dc3545;
+  color: #ef4444;
+  background: #fee2e2;
 }
 
 .verification-statuses span[style*='orange'] {
-  color: #ff8c00;
+  color: #f59e0b;
+  background: #fef3c7;
 }
 
 /* Highlighted Sections */
 .applicant-portal form {
-  background: #f0f8ff;
-  padding: 1rem;
-  border-radius: 8px;
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 12px;
   margin-bottom: 1rem;
-  border: 1px solid #ddd;
+  border: 2px solid #e2e8f0;
 }
 
 .applicant-portal form h3 {
   margin-top: 0;
-  color: #4a90e2;
+  color: #1e293b;
+  border-bottom: 2px solid #e2e8f0;
 }
 
 /* Responsive Design */
@@ -256,13 +304,19 @@
   }
 
   .logout-container {
-    top: 15px;
-    right: 15px;
+    top: 1rem;
+    right: 1rem;
   }
 
   .logout-button {
-    width: 100%;
-    text-align: center;
+    width: auto;
+    padding: 0.5rem 1rem;
+  }
+
+  .applicant-portal {
+    padding: 1.5rem;
+    margin-top: 60px;
+    border-radius: 12px;
   }
 
   .applicant-portal button {

@@ -1,41 +1,45 @@
-/* Employer Portal Container */
+/* Clean Simple Design - Employer Portal */
 .employer-portal {
   max-width: 900px;
   margin: 2rem auto;
-  padding: 1.5rem;
+  margin-top: 80px;
+  padding: 2.5rem;
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: 'Roboto', sans-serif;
-  color: #333;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #1e293b;
 }
 
 /* Logout Button */
 .logout-container {
   display: flex;
-  justify-content: flex-end; /* Align to the right */
-  position: absolute;
-  right: 9%;
-  padding: 1rem;
+  justify-content: flex-end;
+  position: fixed;
+  top: 1.5rem;
+  right: 2rem;
+  z-index: 1000;
 }
 
 .logout-button {
-  background-color: #ff4d4d;
+  background: #ef4444;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   width: 100px;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1rem;
   cursor: pointer;
   font-size: 0.9rem;
-  font-weight: bold;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.2);
+  transition: all 0.2s ease;
 }
 
 .logout-button:hover {
-  background-color: #e63939;
-  transform: translateY(-2px);
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
 }
 
 .logout-button:focus {
@@ -45,23 +49,26 @@
 /* Headings */
 .employer-portal h2 {
   font-size: 2rem;
-  color: #2c3e50;
+  color: #1e293b;
   text-align: center;
   margin-bottom: 1.5rem;
+  font-weight: 700;
 }
 
 .employer-portal h3 {
   font-size: 1.5rem;
-  color: #34495e;
+  color: #1e293b;
   margin-bottom: 1rem;
-  border-bottom: 2px solid #3498db;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
   padding-bottom: 0.5rem;
 }
 
 .employer-portal h4 {
   font-size: 1.2rem;
-  color: #2c3e50;
+  color: #1e293b;
   margin: 1rem 0 0.5rem;
+  font-weight: 600;
 }
 
 /* List of Resumes */
@@ -71,18 +78,19 @@
 }
 
 .employer-portal li {
-  padding: 1rem;
+  padding: 1.25rem;
   margin-bottom: 1rem;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.2s ease;
 }
 
 .employer-portal li:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-color: #2563eb;
+  background: #ffffff;
 }
 
 /* Resume Details */
@@ -92,13 +100,14 @@
 }
 
 .resume-details strong {
-  color: #34495e;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .resume-details a {
-  color: #3498db;
+  color: #2563eb;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .resume-details a:hover {
@@ -107,24 +116,29 @@
 
 /* Buttons */
 .employer-portal button {
-  background-color: #ff4d4d;
+  background: #2563eb;
   color: white;
   border: none;
   border-radius: 8px;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.5rem;
   font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease, box-shadow 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.2);
 }
 
 .employer-portal button:hover {
-  background-color: #ff4d4d;
-  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.4);
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.3);
 }
 
 .employer-portal button:disabled {
-  background-color: #cccccc;
+  background: #cbd5e1;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Status Badges */
@@ -133,28 +147,30 @@
   padding: 0.4rem 0.8rem;
   border-radius: 8px;
   font-size: 0.9rem;
-  font-weight: bold;
+  font-weight: 600;
 }
 
 .status-badge.verified {
-  background-color: #28a745;
-  color: white;
+  background: #dcfce7;
+  color: #22c55e;
 }
 
 .status-badge.pending {
-  background-color: #ffc107;
-  color: #333;
+  background: #fef3c7;
+  color: #f59e0b;
 }
 
 .status-badge.unverified {
-  background-color: #dc3545;
-  color: white;
+  background: #fee2e2;
+  color: #ef4444;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .employer-portal {
-    padding: 1rem;
+    padding: 1.5rem;
+    margin-top: 60px;
+    border-radius: 12px;
   }
 
   .employer-portal h2 {

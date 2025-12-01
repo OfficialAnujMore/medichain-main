@@ -197,123 +197,194 @@ const PatientPortal = ({ contract, accounts, web3, handleLogout }) => {
       </div>
       <div className="patient-portal">
         <header className="portal-header">
-          <h2>Patient Portal - MediChain</h2>
+          <h2>Patient Dashboard</h2>
+          <p>Manage your medical records and track verification status</p>
         </header>
 
-        <h3>Registered Doctors & Hospitals</h3>
-        <div className="doctor-cards-container">
-          {doctors.map((doctor, index) => {
-            const isUploaded = nfts.some(
-              nft =>
-                nft.hospitalName.toLowerCase() ===
-                doctor.username.toLowerCase(),
-            );
-
-            const doctorStatus = verificationStatuses.find(
-              v =>
-                v.hospitalName.toLowerCase() ===
-                doctor.username.toLowerCase(),
-            );
-
-            return (
-              <div key={index} className="doctor-card">
-                <h4 className="doctor-name">{doctor.username}</h4>
-                {doctorStatus?.doctorVerified &&
-                doctorStatus?.insuranceVerified ? (
-                  <p className="doctor-status" style={{ color: 'green' }}>
-                    Record Uploaded - Verified by both doctor and insurance.
-                  </p>
-                ) : isUploaded ? (
-                  <p className="doctor-status" style={{ color: 'orange' }}>
-                    Record Uploaded - Awaiting verification.
-                  </p>
-                ) : (
-                  <button
-                    className="upload-button"
-                    onClick={() => setSelectedDoctor(doctor.username)}
-                  >
-                    Upload Medical Record
-                  </button>
-                )}
-              </div>
-            );
-          })}
+        {/* Stats Row */}
+        <div className="stats-row">
+          <div className="stat-card">
+            <div className="stat-label">Total Records</div>
+            <div className="stat-value">{nfts.length}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Verified Records</div>
+            <div className="stat-value">
+              {verificationStatuses.filter(
+                s => s.doctorVerified && s.insuranceVerified
+              ).length}
+            </div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Pending Verification</div>
+            <div className="stat-value">
+              {verificationStatuses.filter(
+                s => !s.doctorVerified || !s.insuranceVerified
+              ).length}
+            </div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Available Doctors</div>
+            <div className="stat-value">{doctors.length}</div>
+          </div>
         </div>
 
-        {selectedDoctor && (
-          <div className="upload-form">
-            <h3>Upload Medical Record to {selectedDoctor}</h3>
-            <form onSubmit={uploadMedicalRecord}>
-              <input
-                type="text"
-                placeholder="Patient Name"
-                value={patientName}
-                onChange={e => setPatientName(e.target.value)}
-                required
-              />
-              <input
-                type="file"
-                accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                onChange={async e => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    try {
-                      const hash = await uploadToPinata(file);
-                      setIpfsHash(hash);
-                      alert('Medical record encrypted and uploaded to IPFS successfully!');
-                    } catch (error) {
-                      console.error('Error uploading file:', error.message);
-                      alert('Failed to upload medical record to IPFS.');
-                    }
-                  }
-                }}
-                required
-              />
-              <button type="submit" disabled={!ipfsHash || uploading}>
-                {uploading ? 'Uploading to IPFS...' : 'Upload Medical Record'}
-              </button>
-            </form>
+        {/* Two Column Layout */}
+        <div className="content-grid">
+          {/* Left Column - Doctors */}
+          <div className="section-card">
+            <h3>Healthcare Providers</h3>
+            <div className="doctor-cards-container">
+              {doctors.map((doctor, index) => {
+                const isUploaded = nfts.some(
+                  nft =>
+                    nft.hospitalName.toLowerCase() ===
+                    doctor.username.toLowerCase(),
+                );
+
+                const doctorStatus = verificationStatuses.find(
+                  v =>
+                    v.hospitalName.toLowerCase() ===
+                    doctor.username.toLowerCase(),
+                );
+
+                return (
+                  <div key={index} className="doctor-card">
+                    <div className="doctor-info">
+                      <div className="doctor-name">{doctor.username}</div>
+                      {doctorStatus?.doctorVerified &&
+                      doctorStatus?.insuranceVerified ? (
+                        <div className="doctor-status">
+                          <span className="status-badge verified">
+                            Fully Verified
+                          </span>
+                        </div>
+                      ) : isUploaded ? (
+                        <div className="doctor-status">
+                          <span className="status-badge pending">
+                            Awaiting Verification
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="doctor-status">
+                          <span className="status-badge not-uploaded">
+                            No Record Uploaded
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <div className="doctor-actions">
+                      {!isUploaded && (
+                        <button
+                          className="upload-button"
+                          onClick={() => setSelectedDoctor(doctor.username)}
+                        >
+                          Upload Record
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {selectedDoctor && (
+              <div className="upload-form">
+                <h3>Upload Medical Record to {selectedDoctor}</h3>
+                <form onSubmit={uploadMedicalRecord}>
+                  <input
+                    type="text"
+                    placeholder="Patient Name"
+                    value={patientName}
+                    onChange={e => setPatientName(e.target.value)}
+                    required
+                  />
+                  <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                    onChange={async e => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        try {
+                          const hash = await uploadToPinata(file);
+                          setIpfsHash(hash);
+                          alert('Medical record encrypted and uploaded to IPFS successfully!');
+                        } catch (error) {
+                          console.error('Error uploading file:', error.message);
+                          alert('Failed to upload medical record to IPFS.');
+                        }
+                      }
+                    }}
+                    required
+                  />
+                  <button type="submit" disabled={!ipfsHash || uploading}>
+                    {uploading ? 'Uploading to IPFS...' : 'Upload Medical Record'}
+                  </button>
+                </form>
+              </div>
+            )}
           </div>
-        )}
 
-        <h3>Your Medical Record NFTs</h3>
-        <ul>
-          {nfts.map((nft, index) => (
-            <li key={index}>Medical Record NFT Token ID: {nft.tokenId}</li>
-          ))}
-        </ul>
-
-        <h3>Verification Status</h3>
-        <ul>
-          {verificationStatuses.map((status, index) => (
-            <li key={index}>
-              <strong>NFT ID:</strong> {status.tokenId} <br />
-              <strong>Hospital Name:</strong> {status.hospitalName} <br />
-              <strong>Doctor Verified:</strong>{' '}
-              {status.doctorVerified ? (
-                <span style={{ color: 'green' }}>✅ Yes</span>
-              ) : (
-                <span style={{ color: 'red' }}>❌ No</span>
-              )}
-              <br />
-              <strong>Insurance Company:</strong> {status.insuranceName} <br />
-              <strong>Insurance Status:</strong>{' '}
-              {status.insuranceStatus === 'Approved' ? (
-                <span style={{ color: 'green' }}>
-                  ✅ {status.insuranceStatus}
-                </span>
-              ) : status.insuranceStatus === 'Requested' ? (
-                <span style={{ color: 'orange' }}>
-                  ⚠ {status.insuranceStatus}
-                </span>
-              ) : (
-                <span style={{ color: 'red' }}>
-                  ❌ {status.insuranceStatus}
-                </span>
-              )}
-            </li>
-          ))}
-        </ul>
+          {/* Right Column - Verification Status */}
+          <div className="section-card">
+            <h3>Verification Status</h3>
+            {verificationStatuses.length === 0 ? (
+              <p style={{ color: '#64748b', textAlign: 'center', padding: '2rem' }}>
+                No records uploaded yet
+              </p>
+            ) : (
+              <div className="verification-grid">
+                {verificationStatuses.map((status, index) => (
+                  <div key={index} className="verification-card">
+                    <div className="verification-card-header">
+                      <div className="verification-card-title">
+                        Record #{status.tokenId}
+                      </div>
+                    </div>
+                    <div className="verification-card-body">
+                      <div className="verification-item">
+                        <span className="verification-label">Hospital:</span>
+                        <span className="verification-value">
+                          {status.hospitalName}
+                        </span>
+                      </div>
+                      <div className="verification-item">
+                        <span className="verification-label">Doctor:</span>
+                        <span
+                          className={`verification-value ${
+                            status.doctorVerified ? 'success' : 'error'
+                          }`}
+                        >
+                          {status.doctorVerified ? 'Verified' : 'Pending'}
+                        </span>
+                      </div>
+                      <div className="verification-item">
+                        <span className="verification-label">Insurance:</span>
+                        <span className="verification-value">
+                          {status.insuranceName || 'N/A'}
+                        </span>
+                      </div>
+                      <div className="verification-item">
+                        <span className="verification-label">Status:</span>
+                        <span
+                          className={`verification-value ${
+                            status.insuranceStatus === 'Approved'
+                              ? 'success'
+                              : status.insuranceStatus === 'Requested'
+                              ? 'warning'
+                              : 'error'
+                          }`}
+                        >
+                          {status.insuranceStatus}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

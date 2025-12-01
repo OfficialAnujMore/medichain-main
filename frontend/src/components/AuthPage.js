@@ -114,42 +114,76 @@ const AuthPage = ({ setUserRole, contract, accounts }) => {
     }
   };
 
+  const roles = [
+    { value: 'patient', label: 'Patient' },
+    { value: 'doctor', label: 'Doctor/Hospital' },
+    { value: 'insurance', label: 'Insurance Company' },
+  ];
+
   return (
     <div className="auth-container">
-      <h1>MediChain - {isRegister ? 'Register' : 'Login'}</h1>
-      <form className="auth-form" onSubmit={handleAuth}>
-        <input
-          type="text"
-          className="username"
-          placeholder="Username"
-          value={username}
-          onChange={e => setUsername(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          className="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-        />
-        <select value={role} onChange={e => setRole(e.target.value)}>
-          <option value="patient">Patient</option>
-          <option value="doctor">Doctor/Hospital</option>
-          <option value="insurance">Insurance Company</option>
-        </select>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Processing...' : isRegister ? 'Register' : 'Login'}
-        </button>
-      </form>
-      <button
-        className="switch-button"
-        onClick={() => setIsRegister(!isRegister)}
-        disabled={loading}
-      >
-        Switch to {isRegister ? 'Login' : 'Register'}
-      </button>
+      <div className="auth-content">
+        <h1>MediChain</h1>
+        <p className="auth-subtitle">{isRegister ? 'Create your account' : 'Welcome back'}</p>
+        
+        <form className="auth-form" onSubmit={handleAuth}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              type="text"
+              className="username"
+              placeholder="Enter your username"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              className="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Select Role</label>
+            <div className="role-selection">
+              {roles.map((roleOption) => (
+                <button
+                  key={roleOption.value}
+                  type="button"
+                  className={`role-box ${role === roleOption.value ? 'selected' : ''}`}
+                  onClick={() => setRole(roleOption.value)}
+                >
+                  <span className="role-label">{roleOption.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          <button type="submit" className="submit-button" disabled={loading}>
+            {loading ? 'Processing...' : isRegister ? 'Register' : 'Login'}
+          </button>
+        </form>
+        
+        <div className="auth-footer">
+          <button
+            className="switch-button"
+            onClick={() => setIsRegister(!isRegister)}
+            disabled={loading}
+          >
+            {isRegister ? 'Already have an account? Login' : "Don't have an account? Register"}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

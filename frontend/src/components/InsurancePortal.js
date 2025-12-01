@@ -152,7 +152,7 @@ const InsurancePortal = ({ contract, accounts, handleLogout }) => {
   if (!isRegistered) {
     return (
       <div className="error-message">
-        <h2>⚠️ Registration Required</h2>
+        <h2>Registration Required</h2>
         <p>You are not a registered insurance company. Please contact the administrator to register your account on the blockchain.</p>
         <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>
           Make sure you registered with MetaMask and the transaction was confirmed.
@@ -160,6 +160,9 @@ const InsurancePortal = ({ contract, accounts, handleLogout }) => {
       </div>
     );
   }
+
+  const verifiedCount = requests.filter(r => r.isVerified).length;
+  const pendingCount = requests.filter(r => !r.isVerified).length;
 
   return (
     <div className="app-container">
@@ -171,86 +174,127 @@ const InsurancePortal = ({ contract, accounts, handleLogout }) => {
 
       <div className="insurance-portal">
         <header className="portal-header">
-          <h2>Insurance Company Portal - MediChain</h2>
-          <p style={{ marginTop: '0.5rem', color: '#64748b', fontSize: '0.9rem' }}>
-            Review and verify medical records requested by doctors
-          </p>
+          <h2>Insurance Dashboard</h2>
+          <p>Review and verify medical records requested by doctors</p>
         </header>
-        
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-          <h3>📋 Verification Requests</h3>
-          <button 
-            className="refresh-button"
-            onClick={() => {
-              fetchRequests();
-              fetchMedicalRecords();
-            }}
-            title="Refresh requests"
-          >
-            🔄 Refresh
-          </button>
-        </div>
-        {requests.length === 0 ? (
-          <p style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
-            No verification requests at this time. Doctors will request verification for patient records here.
-          </p>
-        ) : (
-          <div className="list-container">
-            <ul className="requests-list">
-              {requests.map(request => (
-                <li key={request.tokenId} className="request-card">
-                  <div className="request-header">
-                    <strong>Token ID:</strong> {String(request.tokenId) || 'N/A'}
-                  </div>
-                  <div className="request-details">
-                    <strong>Requested by:</strong> {request.doctorName} ({request.doctor})
-                  </div>
-                  <div className="request-actions">
-                    {request.isVerified ? (
-                      <span className="verified-badge">✅ Verified</span>
-                    ) : (
-                      <button 
-                        className="approve-button"
-                        onClick={() => approveRequest(request.tokenId)}
-                      >
-                        Approve Verification
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
-        {medicalRecords.length > 0 && (
-          <>
-            <h3>🏥 Medical Records for Verification</h3>
-            <ul className="records-list">
-              {medicalRecords.map(record => (
-                <li key={record.tokenId} className="record-card">
-                  <div className="record-header">
-                    <strong>Token ID:</strong> {String(record.tokenId) || 'N/A'}
-                    <br />
-                    <strong>Patient:</strong> {record.patientName}
-                    <br />
-                    <strong>Hospital:</strong> {record.hospitalName}
+        {/* Stats Row */}
+        <div className="stats-row">
+          <div className="stat-card">
+            <div className="stat-label">Total Requests</div>
+            <div className="stat-value">{requests.length}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Verified</div>
+            <div className="stat-value">{verifiedCount}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Pending Review</div>
+            <div className="stat-value">{pendingCount}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Medical Records</div>
+            <div className="stat-value">{medicalRecords.length}</div>
+          </div>
+        </div>
+
+        {/* Two Column Layout */}
+        <div className="content-layout">
+          {/* Left Column - Requests */}
+          <div className="section-card">
+            <div className="section-header">
+              <h3>Verification Requests</h3>
+              <button 
+                className="refresh-button"
+                onClick={() => {
+                  fetchRequests();
+                  fetchMedicalRecords();
+                }}
+                title="Refresh requests"
+              >
+                Refresh
+              </button>
+            </div>
+            {requests.length === 0 ? (
+              <div className="empty-state">
+                No verification requests at this time. Doctors will request verification for patient records here.
+              </div>
+            ) : (
+              <div className="requests-grid">
+                {requests.map(request => (
+                  <div key={request.tokenId} className="request-card">
+                    <div className="request-header">
+                      <strong>Token ID</strong>
+                      <span>#{String(request.tokenId) || 'N/A'}</span>
+                    </div>
+                    <div className="request-details">
+                      <strong>Requested by:</strong> {request.doctorName}
+                      <br />
+                      <span style={{ fontSize: '0.8125rem', color: '#64748b' }}>
+                        {request.doctor}
+                      </span>
+                    </div>
+                    <div className="request-actions">
+                      {request.isVerified ? (
+                        <span className="verified-badge">Verified</span>
+                      ) : (
+                        <button 
+                          className="approve-button"
+                          onClick={() => approveRequest(request.tokenId)}
+                        >
+                          Approve Verification
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="record-actions">
-                    <a
-                      href={`https://gateway.pinata.cloud/ipfs/${record.ipfsHash}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="view-record-link"
-                    >
-                      📄 View Medical Record
-                    </a>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Right Column - Medical Records */}
+          <div className="section-card">
+            <div className="section-header">
+              <h3>Medical Records</h3>
+            </div>
+            {medicalRecords.length === 0 ? (
+              <div className="empty-state">
+                No medical records available for verification
+              </div>
+            ) : (
+              <div className="records-grid">
+                {medicalRecords.map(record => (
+                  <div key={record.tokenId} className="record-card">
+                    <div className="record-header">
+                      <div className="record-header-item">
+                        <strong>Token ID</strong>
+                        <span>#{String(record.tokenId) || 'N/A'}</span>
+                      </div>
+                      <div className="record-header-item">
+                        <strong>Patient</strong>
+                        <span>{record.patientName}</span>
+                      </div>
+                      <div className="record-header-item">
+                        <strong>Hospital</strong>
+                        <span>{record.hospitalName}</span>
+                      </div>
+                    </div>
+                    <div className="record-actions">
+                      <a
+                        href={`https://gateway.pinata.cloud/ipfs/${record.ipfsHash}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="view-record-link"
+                      >
+                        View Medical Record
+                      </a>
+                    </div>
                   </div>
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

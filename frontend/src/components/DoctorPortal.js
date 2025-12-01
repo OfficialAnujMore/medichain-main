@@ -215,7 +215,7 @@ const DoctorPortal = ({ contract, accounts, handleLogout }) => {
   if (!isRegistered) {
     return (
       <div className="error-message">
-        <h2>⚠️ Registration Required</h2>
+        <h2>Registration Required</h2>
         <p>You are not a registered doctor/hospital. Please contact the administrator to register your account on the blockchain.</p>
         <p style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>
           Make sure you registered with MetaMask and the transaction was confirmed.
@@ -223,6 +223,9 @@ const DoctorPortal = ({ contract, accounts, handleLogout }) => {
       </div>
     );
   }
+
+  const verifiedCount = medicalRecords.filter(r => r.isVerifiedByDoctor).length;
+  const pendingCount = medicalRecords.filter(r => !r.isVerifiedByDoctor).length;
 
   return (
     <div className="app-container">
@@ -233,24 +236,54 @@ const DoctorPortal = ({ contract, accounts, handleLogout }) => {
       </div>
       <div className="doctor-portal">
         <header className="portal-header">
-          <h2>Doctor/Hospital Portal - MediChain</h2>
+          <h2>Doctor Dashboard</h2>
+          <p>Review and verify patient medical records</p>
         </header>
-        <h3>📋 Patient Medical Records</h3>
+
+        {/* Stats Row */}
+        <div className="stats-row">
+          <div className="stat-card">
+            <div className="stat-label">Total Records</div>
+            <div className="stat-value">{medicalRecords.length}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Verified</div>
+            <div className="stat-value">{verifiedCount}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Pending Review</div>
+            <div className="stat-value">{pendingCount}</div>
+          </div>
+          <div className="stat-card">
+            <div className="stat-label">Insurance Companies</div>
+            <div className="stat-value">{registeredInsurance.length}</div>
+          </div>
+        </div>
+
+        <h3>Patient Medical Records</h3>
         {medicalRecords.length === 0 ? (
-          <p style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+          <div className="empty-state">
             No medical records found. Patients need to upload their records first.
-          </p>
+          </div>
         ) : (
-          <ul className="records-list">
+          <div className="records-grid">
             {medicalRecords.map(record => (
-              <li key={record.tokenId} className="record-card">
+              <div key={record.tokenId} className="record-card">
                 <div className="record-header">
-                  <strong>Token ID:</strong> {record.tokenId}
-                  <br />
-                  <strong>Patient:</strong> {record.patientName}
-                  <br />
-                  <strong>Hospital:</strong> {record.hospitalName}
+                  <div className="record-header-item">
+                    <strong>Token ID</strong>
+                    <span>#{record.tokenId}</span>
+                  </div>
+                  <div className="record-header-item">
+                    <strong>Patient</strong>
+                    <span>{record.patientName}</span>
+                  </div>
+                  <div className="record-header-item">
+                    <strong>Hospital</strong>
+                    <span>{record.hospitalName}</span>
+                  </div>
                 </div>
+                
                 <div className="record-actions">
                   <a
                     href={`https://gateway.pinata.cloud/ipfs/${record.ipfsHash}`}
@@ -258,84 +291,85 @@ const DoctorPortal = ({ contract, accounts, handleLogout }) => {
                     rel="noopener noreferrer"
                     className="view-record-link"
                   >
-                    📄 View Medical Record
+                    View Medical Record
                   </a>
                 </div>
-                <div className="verification-status">
-                  <strong>Doctor Verified:</strong>{' '}
-                  {record.isVerifiedByDoctor ? (
-                    <span className="verified-badge">✅ Verified</span>
-                  ) : (
-                    <button 
-                      className="verify-button"
-                      onClick={() => verifyRecord(record.tokenId)}
-                    >
-                      Verify Record
-                    </button>
-                  )}
-                </div>
-                <div className="insurance-section">
-                  <h4>🏥 Request Insurance Verification</h4>
-                  {registeredInsurance.length === 0 ? (
-                    <p style={{ color: '#64748b', fontStyle: 'italic' }}>
-                      No insurance companies registered yet.
-                    </p>
-                  ) : selectedRecordForRequest === record.tokenId ? (
-                    <div className="request-form">
-                      <select
-                        className="insurance-select"
-                        onChange={(e) => {
-                          if (e.target.value) {
-                            requestVerification(record.tokenId, e.target.value);
-                          }
-                        }}
-                        defaultValue=""
+
+                <div className="verification-section">
+                  <div className="verification-status">
+                    <strong>Doctor Verification</strong>
+                    {record.isVerifiedByDoctor ? (
+                      <span className="verified-badge">Verified</span>
+                    ) : (
+                      <button 
+                        className="verify-button"
+                        onClick={() => verifyRecord(record.tokenId)}
                       >
-                        <option value="">Select Insurance Company...</option>
-                        {registeredInsurance.map((insurance, idx) => {
-                          const lowerCaseInsurance = insurance.toLowerCase();
-                          const status = requestStatus[record.tokenId]?.[insurance] === 'Requested';
-                          const isVerified = record.insuranceStatus?.[lowerCaseInsurance];
-                          
-                          if (isVerified) {
+                        Verify Record
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="insurance-section">
+                    <h4>Insurance Verification</h4>
+                    {registeredInsurance.length === 0 ? (
+                      <p style={{ color: '#64748b', fontStyle: 'italic', fontSize: '0.875rem' }}>
+                        No insurance companies registered yet.
+                      </p>
+                    ) : selectedRecordForRequest === record.tokenId ? (
+                      <div className="request-form">
+                        <select
+                          className="insurance-select"
+                          onChange={(e) => {
+                            if (e.target.value) {
+                              requestVerification(record.tokenId, e.target.value);
+                            }
+                          }}
+                          defaultValue=""
+                        >
+                          <option value="">Select Insurance Company...</option>
+                          {registeredInsurance.map((insurance, idx) => {
+                            const lowerCaseInsurance = insurance.toLowerCase();
+                            const status = requestStatus[record.tokenId]?.[insurance] === 'Requested';
+                            const isVerified = record.insuranceStatus?.[lowerCaseInsurance];
+                            
+                            if (isVerified) {
+                              return (
+                                <option key={idx} value={insurance} disabled>
+                                  {insurance} (Already Verified)
+                                </option>
+                              );
+                            }
+                            if (status) {
+                              return (
+                                <option key={idx} value={insurance} disabled>
+                                  {insurance} (Request Pending)
+                                </option>
+                              );
+                            }
                             return (
-                              <option key={idx} value={insurance} disabled>
-                                {insurance} (Already Verified)
+                              <option key={idx} value={insurance}>
+                                {insurance}
                               </option>
                             );
-                          }
-                          if (status) {
-                            return (
-                              <option key={idx} value={insurance} disabled>
-                                {insurance} (Request Pending)
-                              </option>
-                            );
-                          }
-                          return (
-                            <option key={idx} value={insurance}>
-                              {insurance}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <button
-                        className="cancel-request-button"
-                        onClick={() => setSelectedRecordForRequest(null)}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="insurance-actions">
-                      <button
-                        className="request-verification-button"
-                        onClick={() => setSelectedRecordForRequest(record.tokenId)}
-                      >
-                        Request Verification from Insurance
-                      </button>
-                      {record.insuranceCompanies && record.insuranceCompanies.length > 0 && (
-                        <div style={{ marginTop: '1rem' }}>
-                          <strong>Status:</strong>
+                          })}
+                        </select>
+                        <button
+                          className="cancel-request-button"
+                          onClick={() => setSelectedRecordForRequest(null)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="insurance-actions">
+                        <button
+                          className="request-verification-button"
+                          onClick={() => setSelectedRecordForRequest(record.tokenId)}
+                        >
+                          Request Insurance Verification
+                        </button>
+                        {record.insuranceCompanies && record.insuranceCompanies.length > 0 && (
                           <ul className="insurance-status-list">
                             {record.insuranceCompanies.map((insurance, index) => {
                               const lowerCaseInsurance = insurance.toLowerCase();
@@ -344,26 +378,26 @@ const DoctorPortal = ({ contract, accounts, handleLogout }) => {
                               
                               return (
                                 <li key={index} className="insurance-status-item">
-                                  {insurance}:{' '}
+                                  <span>{insurance}</span>
                                   {isVerified ? (
-                                    <span className="verified-badge">✅ Verified</span>
+                                    <span className="verified-badge">Verified</span>
                                   ) : status ? (
-                                    <span className="requested-badge">⚠ Pending</span>
+                                    <span className="requested-badge">Pending</span>
                                   ) : (
-                                    <span style={{ color: '#64748b' }}>Not Requested</span>
+                                    <span style={{ color: '#64748b', fontSize: '0.8125rem' }}>Not Requested</span>
                                   )}
                                 </li>
                               );
                             })}
                           </ul>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>
