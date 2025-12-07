@@ -20,7 +20,10 @@ const App = () => {
   const [accounts, setAccounts] = useState([]);
   const [contract, setContract] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null);
+  const [userRole, setUserRole] = useState(() => {
+    // Initialize from localStorage
+    return localStorage.getItem('userRole') || null;
+  });
 
   const switchToGanacheNetwork = async () => {
     const chainId = '0x539'; // 1337 in hex
@@ -158,7 +161,17 @@ const App = () => {
 
   const handleLogout = () => {
     setUserRole(null);
+    localStorage.removeItem('userRole');
     alert('You have been logged out.');
+  };
+
+  const handleSetUserRole = (role) => {
+    setUserRole(role);
+    if (role) {
+      localStorage.setItem('userRole', role);
+    } else {
+      localStorage.removeItem('userRole');
+    }
   };
 
   const handleAccountChange = accounts => {
@@ -223,12 +236,16 @@ const App = () => {
         <Route
           path="/"
           element={
-            <AuthPage
-              setUserRole={setUserRole}
-              contract={contract}
-              accounts={accounts}
-              web3={web3}
-            />
+            userRole ? (
+              <Navigate to={`/${userRole}`} replace />
+            ) : (
+              <AuthPage
+                setUserRole={handleSetUserRole}
+                contract={contract}
+                accounts={accounts}
+                web3={web3}
+              />
+            )
           }
         />
         <Route
