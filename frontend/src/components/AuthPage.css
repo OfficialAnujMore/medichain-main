@@ -81,6 +81,47 @@
   color: #9ca3af;
 }
 
+/* Password Input Wrapper */
+.password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input-wrapper input {
+  padding-right: 3rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+}
+
+.toggle-password:hover {
+  color: #2563eb;
+  background: #f1f5f9;
+}
+
+.toggle-password:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.toggle-password svg {
+  width: 20px;
+  height: 20px;
+}
+
 /* Role Selection Boxes */
 .role-selection {
   display: grid;
