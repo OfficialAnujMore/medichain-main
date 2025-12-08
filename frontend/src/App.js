@@ -24,6 +24,9 @@ const App = () => {
     // Initialize from localStorage
     return localStorage.getItem('userRole') || null;
   });
+  const [username, setUsername] = useState(() => {
+    return localStorage.getItem('username') || '';
+  });
 
   const switchToGanacheNetwork = async () => {
     const chainId = '0x539'; // 1337 in hex
@@ -161,16 +164,26 @@ const App = () => {
 
   const handleLogout = () => {
     setUserRole(null);
+    setUsername('');
     localStorage.removeItem('userRole');
+    localStorage.removeItem('username');
     alert('You have been logged out.');
   };
 
-  const handleSetUserRole = (role) => {
+  const handleSetUserRole = (role, user) => {
     setUserRole(role);
+    if (user) {
+      setUsername(user);
+    }
     if (role) {
       localStorage.setItem('userRole', role);
     } else {
       localStorage.removeItem('userRole');
+    }
+    if (user) {
+      localStorage.setItem('username', user);
+    } else {
+      localStorage.removeItem('username');
     }
   };
 
@@ -256,7 +269,8 @@ const App = () => {
                 contract={contract}
                 accounts={accounts}
                 web3={web3}
-                handleLogout={handleLogout} // Pass logout
+                handleLogout={handleLogout}
+                username={username}
               />
             ) : (
               <Navigate to="/" />
